@@ -39,7 +39,7 @@ jobs:
     - name: Submit Dependency Snapshot
       uses: advanced-security/maven-dependency-submission-action@v3
     - name: Upload Lambda Function
-      uses: actions/upload-artifact@v
+      uses: actions/upload-artifact@v3
       with:
         aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
