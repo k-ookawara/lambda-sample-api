@@ -16,9 +16,7 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 17
@@ -37,18 +35,16 @@ jobs:
       with:
         name: Package
         path: staging
-      
-
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Submit Dependency Snapshot
       uses: advanced-security/maven-dependency-submission-action@v3
     - name: Upload Lambda Function
-      uses: k-ookawara/lambda-sample-api@master
+      uses: actions/upload-artifact@v
       with:
         aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws_region: ${{ secrets.AWS_REGION }}
-        function_name: sample-funstion
+        function_name: updateSeat
         zip_file: staging/lambda-sample-api-0.0.1-SNAPSHOT.jar
         dry_run: true
         publish: false
