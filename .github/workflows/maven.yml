@@ -25,13 +25,30 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '17'
-        distribution: 'temurin'
+        distribution: 'corretto'
         cache: maven
     - name: Build with Maven
-      run: mvn -B package --update-snapshots verify
+      run: mvn --batch-mode --update-snapshots package
     - name: Test With Maven
-      run: mvn -B test
+      run: mvn --batch-mode --update-snapshots verify
+    - name: Upload Artifact
+      run: mkdir staging && cp target/*.jar staging
+    - uses: actions/upload-artifact@v3
+      with:
+        name: Package
+        path: staging
+      
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Submit Dependency Snapshot
       uses: advanced-security/maven-dependency-submission-action@v3
+    - name: Upload Lambda Function
+      uses: k-ookawara/lambda-sample-api@master
+      with:
+        aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws_region: ${{ secrets.AWS_REGION }}
+        function_name: sample-funstion
+        zip_file: staging/lambda-sample-api-0.0.1-SNAPSHOT.jar
+        dry_run: true
+        publish: false
